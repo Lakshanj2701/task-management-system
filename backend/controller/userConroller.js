@@ -11,8 +11,27 @@ export function registerUser(req, res) {
 
   newUser
     .save()
-    .then(() => {
-      res.status(201).json({ message: "User registered successfully" });
+    .then((savedUser) => {
+      const token = jwt.sign(
+        {
+          firstName: savedUser.firstName,
+          lastName: savedUser.lastName,
+          email: savedUser.email,
+          role: savedUser.role,
+        },
+        process.env.JWT_SECRET,
+      );
+
+      res.status(201).json({
+        message: "User registered successfully",
+        token: token,
+        user: {
+          firstName: savedUser.firstName,
+          lastName: savedUser.lastName,
+          email: savedUser.email,
+          role: savedUser.role,
+        },
+      });
     })
     .catch((error) => {
       console.error("Registration error:", error);
@@ -34,16 +53,26 @@ export function loginUser(req, res) {
       const passwordMatch = bcrypt.compareSync(data.password, user.password);
 
       if (passwordMatch) {
+        const token = jwt.sign(
+          {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+          },
+          process.env.JWT_SECRET,
+        );
 
-        const token = jwt.sign({
-          firstname: user.firstName,
-          lastname: user.lastName,
-          email: user.email,
-          role: user.role
-        }, "secretkey" );
-
-
-        res.json({ message: "Login successful", token: token });
+        res.json({
+          message: "Login successful",
+          token: token,
+          user: {
+            firstName: user.firstName,
+            lastName: user.lastName,
+            email: user.email,
+            role: user.role,
+          },
+        });
       } else {
         res.status(401).json({ message: "Invalid password" });
       }
