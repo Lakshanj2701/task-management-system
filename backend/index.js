@@ -4,6 +4,9 @@ import mongoose from "mongoose";
 import userRouter from "./routes/userRouter.js";
 import cors from "cors";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 
@@ -11,35 +14,24 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use((req, res, next) => {
-
   let token = req.header("Authorization");
 
   if (token != null) {
-
     token = token.replace("Bearer ", "");
 
-    
-    jwt.verify(token, "secretkey", (err, decoded) => {
-
+    jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         return res.status(401).json({ message: "Unauthorized" });
       } else {
         req.user = decoded;
-        
       }
-
     });
   }
-  
-  
-    next();
 
+  next();
 });
 
-let monogoURl =
-  "mongodb+srv://lahiru:123@cluster0.uw5jbdf.mongodb.net/product?appName=Cluster0";
-
-mongoose.connect(monogoURl);
+mongoose.connect(process.env.MONGO_URL);
 
 let connection = mongoose.connection;
 
@@ -49,8 +41,7 @@ connection.once("open", () => {
 
 app.use("/api/users", userRouter);
 
-app.listen(3000, () => {
-  console.log("Server is running on port 3000");
+app.listen(process.env.PORT, () => {
+  console.log(`Server is running on port ${process.env.PORT}`);
 });
 
-// day 5 1h 16 min  continue to watch the video
