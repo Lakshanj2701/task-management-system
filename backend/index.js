@@ -3,7 +3,6 @@ import bodyParser from "body-parser";
 import mongoose from "mongoose";
 import userRouter from "./routes/userRouter.js";
 import cors from "cors";
-import productRouter from "./routes/productRouter.js";
 import jwt from "jsonwebtoken";
 
 const app = express();
@@ -49,7 +48,6 @@ connection.once("open", () => {
 });
 
 app.use("/api/users", userRouter);
-app.use("/api/products", productRouter);
 
 app.listen(3000, () => {
   console.log("Server is running on port 3000");
