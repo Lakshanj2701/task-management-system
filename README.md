@@ -63,11 +63,7 @@ npm install
 
 Create a `.env` file inside `backend/`:
 
-```env
-PORT=3000
-MONGO_URL=mongodb+srv://<user>:<password>@cluster0.xxxxx.mongodb.net/taskdb?appName=Cluster0
-JWT_SECRET=your_secret_key
-```
+
 
 Start the backend:
 
@@ -110,12 +106,7 @@ npm run dev
 
 **Login body:**
 
-```json
-{
-  "email": "john@example.com",
-  "password": "secret123"
-}
-```
+
 
 ### Tasks — `/api/tasks`
 
